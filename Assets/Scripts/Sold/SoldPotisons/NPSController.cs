@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+// ДОБАВИТЬ ему личный Image нпс меняться картинки + картинка главная а должно быть GameOdject + Надо добавить тексту задний фон типо хотя-бы белый
+
+
 public class NPSController : MonoBehaviour
 {
     // Префаб NPC
