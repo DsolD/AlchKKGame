@@ -2240,7 +2240,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mycorkaLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   startPosition: {x: 0, y: 0}
   kotel: {fileID: 2014596933}
   mainCamera: {fileID: 519420031}
