@@ -2,67 +2,98 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-
 public class UIController : MonoBehaviour
 {
     // Ссылки на объекты
+    public Camera mainCamera;
+
     public Canvas CraftingCanvas;
     public Canvas StupaCanvas;
-    public Camera mainCamera;
-    public Button grindButton;
+    public Canvas SoldCanvas; // Canvas для отображения Sold
+    public Canvas ExitCanvas; // Canvas для отображения Exit
 
-    // Переменные состояния
-    public bool isStupaActive = false; // private стоит должно но да
-    public bool isGrinding = false;// private стоит должно но да
+    // Кнопки для перехода между Canvas
+    public Button CraftingButton; // Кнопка для перехода на CraftingCanvas
+    public Button StupaButton; // Кнопка для перехода на StupaCanvas
+    public Button Craft_SoldButton; // Кнопка для перехода на SoldCanvas
+    public Button Exit_SoldButton; // Кнопка для перехода на SoldCanvas
+    public Button ExitButton; // Кнопка для перехода на ExitCanvas
 
-    // Переменные для плавных переходов
-    private float transitionSpeed = 5f; // Скорость перехода
-    private CanvasGroup craftingCanvasGroup;
-    private CanvasGroup stupaCanvasGroup;
+    public Vector2 targetPosition; // Целевая позиция для перемещения
+    public float moveSpeed = 5f; // Скорость перемещения
 
-    private void Awake()
+    private Vector2 currentPosition; // Текущая позиция
+    private bool isMoving = false; // Флаг для отслеживания перемещения
+
+    // Метод для перемещения
+    public void MoveTo(Vector2 position)
     {
-        // Получение CanvasGroup для плавных переходов
-        craftingCanvasGroup = CraftingCanvas.GetComponent<CanvasGroup>();
-        stupaCanvasGroup = StupaCanvas.GetComponent<CanvasGroup>();
-
-        // Изначальное состояние
-        craftingCanvasGroup.alpha = 1f; // Полная видимость
-        stupaCanvasGroup.alpha = 0f; // Полная невидимость
+        targetPosition = position;
+        isMoving = true;
     }
 
-    // Методы навигации UI
-    public void BackToCrafting()
+    // Метод для отображения SoldCanvas
+    public void ShowSoldCanvas()
     {
-        // Плавный переход
-        StartCoroutine(FadeCanvas(craftingCanvasGroup, 1f, transitionSpeed));
-        StartCoroutine(FadeCanvas(stupaCanvasGroup, 0f, transitionSpeed));
-
-        // Деактивация элементов
-        grindButton.gameObject.SetActive(false);
-        isStupaActive = false;
-        isGrinding = false;
+        SoldCanvas.gameObject.SetActive(true);
     }
 
-    // Методы для активации и деактивации ступы
-    public void ActivateStupa()
+    // Метод для отображения ExitCanvas
+    public void ShowExitCanvas()
     {
-        // Плавный переход
-        StartCoroutine(FadeCanvas(craftingCanvasGroup, 0f, transitionSpeed));
-        StartCoroutine(FadeCanvas(stupaCanvasGroup, 1f, transitionSpeed));
-
-        isStupaActive = true;
-        grindButton.gameObject.SetActive(true);
+        ExitCanvas.gameObject.SetActive(true);
     }
 
-    public void DeactivateStupa()
+    // Метод для перехода на CraftingCanvas
+    public void GoToCrafting()
     {
-        // Плавный переход
-        StartCoroutine(FadeCanvas(craftingCanvasGroup, 1f, transitionSpeed));
-        StartCoroutine(FadeCanvas(stupaCanvasGroup, 0f, transitionSpeed));
+        MoveTo(CraftingCanvas.transform.position);
+    }
 
-        isStupaActive = false;
-        grindButton.gameObject.SetActive(false);
+    // Метод для перехода на StupaCanvas
+    public void GoToStupa()
+    {
+        MoveTo(StupaCanvas.transform.position);
+    }
+
+    // Метод для перехода на SoldCanvas
+    public void CraftGoToSold()
+    {
+        MoveTo(SoldCanvas.transform.position);
+    }
+
+    public void ExitGoToSold()
+    {
+        MoveTo(SoldCanvas.transform.position);
+    }
+
+    // Метод для перехода на ExitCanvas
+    public void GoToExit()
+    {
+        MoveTo(ExitCanvas.transform.position);
+    }
+
+    // Обновление положения Canvas
+    private void Update()
+    {
+        // Перемещение Canvas если isMoving = true
+        if (isMoving)
+        {
+            // Получение текущего положения
+            currentPosition = CraftingCanvas.transform.position;
+
+            // Рассчет расстояния до целевой точки
+            float distance = Vector2.Distance(currentPosition, targetPosition);
+
+            // Перемещение с помощью Vector2.MoveTowards
+            CraftingCanvas.transform.position = Vector2.MoveTowards(currentPosition, targetPosition, moveSpeed * Time.deltaTime);
+
+            // Проверка достижения целевой точки
+            if (distance <= 0.1f)
+            {
+                isMoving = false;
+            }
+        }
     }
 
     // Метод для плавного перехода между Canvas-ами
@@ -76,4 +107,18 @@ public class UIController : MonoBehaviour
 
         canvasGroup.alpha = targetAlpha;
     }
+
+    // Настройка кнопок при запуске
+    private void Start()
+    {
+
+        // Добавление обработчиков кликов
+        CraftingButton.onClick.AddListener(GoToCrafting);
+        StupaButton.onClick.AddListener(GoToStupa);
+        Exit_SoldButton.onClick.AddListener(ExitGoToSold);
+        Craft_SoldButton.onClick.AddListener(CraftGoToSold);
+        ExitButton.onClick.AddListener(GoToExit);
+
+    }
+
 }
