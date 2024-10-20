@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class UIController : MonoBehaviour
 {
@@ -28,6 +29,18 @@ public class UIController : MonoBehaviour
 
     private bool isZooming = false; // Флаг, указывающий, происходит ли увеличение камеры
 
+
+    private void Awake()
+    {
+
+        HideCraftingCanvas();
+        HideExitCanvas();
+      //  HideSoldCanvas(); временное решения пока не нету запомиинание твоей сцены
+        HideStupaCanvas();
+        //CraftingCanvas.GetComponent<CanvasGroup>().interactable = false; // Предотвращает взаимодействие
+    }
+
+
     private void Start()
     {
         // Добавление обработчиков кликов
@@ -41,34 +54,117 @@ public class UIController : MonoBehaviour
         mainCamera.orthographicSize = initialOrthographicSize; // Начальный размер 5
     }
 
+    private void ShowCraftingCanvas()
+    {
+
+        CraftingCanvas.GetComponent<CanvasGroup>().alpha = 1; // Установите альфа-канал в 0 для полной прозрачности
+        CraftingCanvas.GetComponent<CanvasGroup>().blocksRaycasts = true; // Предотвращает нажатия
+
+    }
+
+    private void ShowStupaCanvas()
+    {
+
+        StupaCanvas.GetComponent<CanvasGroup>().alpha = 1; // Установите альфа-канал в 0 для полной прозрачности
+        StupaCanvas.GetComponent<CanvasGroup>().blocksRaycasts = true; // Предотвращает нажатия
+
+    }
+
+    private void ShowExitCanvas()
+    {
+
+        ExitCanvas.GetComponent<CanvasGroup>().alpha = 1; // Установите альфа-канал в 0 для полной прозрачности
+        ExitCanvas.GetComponent<CanvasGroup>().blocksRaycasts = true; // Предотвращает нажатия
+
+    }
+    private void ShowSoldCanvas()
+    {
+
+        SoldCanvas.GetComponent<CanvasGroup>().alpha = 1; // Установите альфа-канал в 0 для полной прозрачности
+        SoldCanvas.GetComponent<CanvasGroup>().blocksRaycasts = true; // Предотвращает нажатия
+
+    }
+
+    /// ////////////////////////////////////////////////////////////////////////
+    private void HideCraftingCanvas()
+    {
+
+        CraftingCanvas.GetComponent<CanvasGroup>().alpha = 0.7f; // Установите альфа-канал в 0.7f для полной прозрачности
+        CraftingCanvas.GetComponent<CanvasGroup>().blocksRaycasts = false; // Предотвращает нажатия
+
+    }
+
+    private void HideStupaCanvas()
+    {
+
+        StupaCanvas.GetComponent<CanvasGroup>().alpha = 0.7f; // Установите альфа-канал в 0.7f для полной прозрачности
+        StupaCanvas.GetComponent<CanvasGroup>().blocksRaycasts = false; // Предотвращает нажатия
+
+    }
+
+    private void HideExitCanvas()
+    {
+
+        ExitCanvas.GetComponent<CanvasGroup>().alpha = 0.7f; // Установите альфа-канал в 0.7f для полной прозрачности
+        ExitCanvas.GetComponent<CanvasGroup>().blocksRaycasts = false; // Предотвращает нажатия
+
+    }
+    private void HideSoldCanvas()
+    {
+
+        SoldCanvas.GetComponent<CanvasGroup>().alpha = 0.7f; // Установите альфа-канал в 0,7f для полной прозрачности
+        SoldCanvas.GetComponent<CanvasGroup>().blocksRaycasts = false; // Предотвращает нажатия
+
+    }
+
+
     public void MoveToCrafting()
     {
         ZoomInOut(); // Вызываем ZoomInOut для всех кнопок
         StartCoroutine(MoveCamera(CraftingCanvas.transform.position));
+
+        ShowCraftingCanvas();
+        HideSoldCanvas();
     }
 
     public void MoveToStupa()
     {
         ZoomInOut(); // Вызываем ZoomInOut для всех кнопок
         StartCoroutine(MoveCamera(StupaCanvas.transform.position));
+
+        ShowStupaCanvas();
+        HideSoldCanvas ();
+
     }
 
     public void MoveToSoldFromCrafting()
     {
         ZoomInOut(); // Вызываем ZoomInOut для всех кнопок
         StartCoroutine(MoveCamera(SoldCanvas.transform.position));
+
+        ShowSoldCanvas();
+        HideCraftingCanvas();
+
     }
 
     public void MoveToSoldFromExit()
     {
         ZoomInOut(); // Вызываем ZoomInOut для всех кнопок
         StartCoroutine(MoveCamera(SoldCanvas.transform.position));
+
+        ShowSoldCanvas();
+        HideExitCanvas();
+
     }
 
     public void MoveToExit()
     {
         ZoomInOut(); // Вызываем ZoomInOut для всех кнопок
         StartCoroutine(MoveCamera(ExitCanvas.transform.position));
+
+        HideSoldCanvas();
+        ShowExitCanvas();
+
     }
 
     private IEnumerator MoveCamera(Vector2 targetPosition)
