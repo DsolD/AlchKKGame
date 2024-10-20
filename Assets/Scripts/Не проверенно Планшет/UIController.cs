@@ -1,124 +1,139 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class UIController : MonoBehaviour
 {
-    // Ссылки на объекты
+    // РЎСЃС‹Р»РєРё РЅР° РѕР±СЉРµРєС‚С‹
     public Camera mainCamera;
 
     public Canvas CraftingCanvas;
     public Canvas StupaCanvas;
-    public Canvas SoldCanvas; // Canvas для отображения Sold
-    public Canvas ExitCanvas; // Canvas для отображения Exit
+    public Canvas SoldCanvas;
+    public Canvas ExitCanvas;
 
-    // Кнопки для перехода между Canvas
-    public Button CraftingButton; // Кнопка для перехода на CraftingCanvas
-    public Button StupaButton; // Кнопка для перехода на StupaCanvas
-    public Button Craft_SoldButton; // Кнопка для перехода на SoldCanvas
-    public Button Exit_SoldButton; // Кнопка для перехода на SoldCanvas
-    public Button ExitButton; // Кнопка для перехода на ExitCanvas
+    // РљРЅРѕРїРєРё РґР»СЏ РїРµСЂРµС…РѕРґР° РјРµР¶РґСѓ Canvas
+    public Button CraftingButton;
+    public Button StupaButton;
+    public Button CraftingSoldButton; // РљРЅРѕРїРєР° Sold РЅР° CraftingCanvas
+    public Button ExitSoldButton; // РљРЅРѕРїРєР° Sold РЅР° ExitCanvas 
+    public Button ExitButton;
 
-    public Vector2 targetPosition; // Целевая позиция для перемещения
-    public float moveSpeed = 5f; // Скорость перемещения
+    public float moveSpeed = 5f; // РЎРєРѕСЂРѕСЃС‚СЊ РїРµСЂРµРјРµС‰РµРЅРёСЏ РєР°РјРµСЂС‹
+    public float zoomSpeed = 4f; // РЎРєРѕСЂРѕСЃС‚СЊ РїСЂРёР±Р»РёР¶РµРЅРёСЏ РєР°РјРµСЂС‹ - РЈР’Р•Р›РР§Р•РќРќРђРЇ СЃРєРѕСЂРѕСЃС‚СЊ
+    public float initialOrthographicSize = 5f; // РќР°С‡Р°Р»СЊРЅС‹Р№ РѕСЂС‚РѕРіСЂР°С„РёС‡РµСЃРєРёР№ СЂР°Р·РјРµСЂ РєР°РјРµСЂС‹
+    public float targetOrthographicSize = 8f; // Р¦РµР»РµРІРѕР№ РѕСЂС‚РѕРіСЂР°С„РёС‡РµСЃРєРёР№ СЂР°Р·РјРµСЂ РєР°РјРµСЂС‹ РїСЂРё СѓРІРµР»РёС‡РµРЅРёРё (zoom out)
 
-    private Vector2 currentPosition; // Текущая позиция
-    private bool isMoving = false; // Флаг для отслеживания перемещения
+    public float zoomInSpeed = 2f; // РЎРєРѕСЂРѕСЃС‚СЊ СѓРјРµРЅСЊС€РµРЅРёСЏ РїСЂРё ZoomIn (РјРµРґР»РµРЅРЅРµРµ)
 
-    // Метод для перемещения
-    public void MoveTo(Vector2 position)
+    private bool isZooming = false; // Р¤Р»Р°Рі, СѓРєР°Р·С‹РІР°СЋС‰РёР№, РїСЂРѕРёСЃС…РѕРґРёС‚ Р»Рё СѓРІРµР»РёС‡РµРЅРёРµ РєР°РјРµСЂС‹
+
+    private void Start()
     {
-        targetPosition = position;
-        isMoving = true;
+        // Р”РѕР±Р°РІР»РµРЅРёРµ РѕР±СЂР°Р±РѕС‚С‡РёРєРѕРІ РєР»РёРєРѕРІ
+        CraftingButton.onClick.AddListener(MoveToCrafting);
+        StupaButton.onClick.AddListener(MoveToStupa);
+        CraftingSoldButton.onClick.AddListener(MoveToSoldFromCrafting);
+        ExitSoldButton.onClick.AddListener(MoveToSoldFromExit);
+        ExitButton.onClick.AddListener(MoveToExit);
+
+        // РЈРІРµР»РёС‡РёРІР°РµРј СЂР°Р·РјРµСЂ РєР°РјРµСЂС‹ РїСЂРё Р·Р°РїСѓСЃРєРµ РёРіСЂС‹
+        mainCamera.orthographicSize = initialOrthographicSize; // РќР°С‡Р°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ 5
     }
 
-    // Метод для отображения SoldCanvas
-    public void ShowSoldCanvas()
+    public void MoveToCrafting()
     {
-        SoldCanvas.gameObject.SetActive(true);
+        ZoomInOut(); // Р’С‹Р·С‹РІР°РµРј ZoomInOut РґР»СЏ РІСЃРµС… РєРЅРѕРїРѕРє
+        StartCoroutine(MoveCamera(CraftingCanvas.transform.position));
     }
 
-    // Метод для отображения ExitCanvas
-    public void ShowExitCanvas()
+    public void MoveToStupa()
     {
-        ExitCanvas.gameObject.SetActive(true);
+        ZoomInOut(); // Р’С‹Р·С‹РІР°РµРј ZoomInOut РґР»СЏ РІСЃРµС… РєРЅРѕРїРѕРє
+        StartCoroutine(MoveCamera(StupaCanvas.transform.position));
     }
 
-    // Метод для перехода на CraftingCanvas
-    public void GoToCrafting()
+    public void MoveToSoldFromCrafting()
     {
-        MoveTo(CraftingCanvas.transform.position);
+        ZoomInOut(); // Р’С‹Р·С‹РІР°РµРј ZoomInOut РґР»СЏ РІСЃРµС… РєРЅРѕРїРѕРє
+        StartCoroutine(MoveCamera(SoldCanvas.transform.position));
     }
 
-    // Метод для перехода на StupaCanvas
-    public void GoToStupa()
+    public void MoveToSoldFromExit()
     {
-        MoveTo(StupaCanvas.transform.position);
+        ZoomInOut(); // Р’С‹Р·С‹РІР°РµРј ZoomInOut РґР»СЏ РІСЃРµС… РєРЅРѕРїРѕРє
+        StartCoroutine(MoveCamera(SoldCanvas.transform.position));
     }
 
-    // Метод для перехода на SoldCanvas
-    public void CraftGoToSold()
+    public void MoveToExit()
     {
-        MoveTo(SoldCanvas.transform.position);
+        ZoomInOut(); // Р’С‹Р·С‹РІР°РµРј ZoomInOut РґР»СЏ РІСЃРµС… РєРЅРѕРїРѕРє
+        StartCoroutine(MoveCamera(ExitCanvas.transform.position));
     }
 
-    public void ExitGoToSold()
+    private IEnumerator MoveCamera(Vector2 targetPosition)
     {
-        MoveTo(SoldCanvas.transform.position);
-    }
+        // РџРѕР»СѓС‡Р°РµРј РЅР°С‡Р°Р»СЊРЅСѓСЋ РїРѕР·РёС†РёСЋ РєР°РјРµСЂС‹
+        Vector2 currentPosition = mainCamera.transform.position;
 
-    // Метод для перехода на ExitCanvas
-    public void GoToExit()
-    {
-        MoveTo(ExitCanvas.transform.position);
-    }
-
-    // Обновление положения Canvas
-    private void Update()
-    {
-        // Перемещение Canvas если isMoving = true
-        if (isMoving)
+        // РџРµСЂРµРјРµС‰Р°РµРј РєР°РјРµСЂСѓ
+        while (Vector2.Distance(currentPosition, targetPosition) > 0f)
         {
-            // Получение текущего положения
-            currentPosition = CraftingCanvas.transform.position;
-
-            // Рассчет расстояния до целевой точки
-            float distance = Vector2.Distance(currentPosition, targetPosition);
-
-            // Перемещение с помощью Vector2.MoveTowards
-            CraftingCanvas.transform.position = Vector2.MoveTowards(currentPosition, targetPosition, moveSpeed * Time.deltaTime);
-
-            // Проверка достижения целевой точки
-            if (distance <= 0.1f)
-            {
-                isMoving = false;
-            }
+            currentPosition = Vector2.MoveTowards(currentPosition, targetPosition, moveSpeed * Time.deltaTime);
+            mainCamera.transform.position = currentPosition;
+            yield return null;
         }
     }
 
-    // Метод для плавного перехода между Canvas-ами
-    private IEnumerator FadeCanvas(CanvasGroup canvasGroup, float targetAlpha, float speed)
+    private void ZoomInOut()
     {
-        while (Mathf.Abs(canvasGroup.alpha - targetAlpha) > 0.01f)
+        if (!isZooming)
         {
-            canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
+            StartCoroutine(ZoomOut2());
+        }
+    }
+    private IEnumerator ZoomOut2() // Р”РѕР±Р°РІР»РµРЅРЅС‹Р№ РјРµС‚РѕРґ ZoomOut СЃ РїР°СѓР·Р°РјРё Рё СѓРјРµРЅСЊС€РµРЅРёСЏРјРё
+    {
+
+        float elapsedTime = 0f;
+        while (elapsedTime < 1f)
+        {
+            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetOrthographicSize, elapsedTime / 50f);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        canvasGroup.alpha = targetAlpha;
+        isZooming = true;
+        yield return new WaitForSeconds(3.52f); // РџР°СѓР·Р° РґР»СЏ РїР»Р°РІРЅРѕРіРѕ РїРµСЂРµС…РѕРґР° РџР РР‘Р›Р•Р–Р•РќРРЇ РљРђРњР•Р Р«  Рљ РљРђРќР’РђРЎРЈ
+        StartCoroutine(ZoomIn()); // Р—Р°РїСѓСЃРєР°РµРј ZoomIn РїРѕСЃР»Рµ РїР°СѓР·С‹
+        isZooming = false;
+
+        // Р”РѕР±Р°РІР»СЏРµРј РїР°СѓР·Сѓ РїРµСЂРµРґ СѓРјРµРЅСЊС€РµРЅРёРµРј
+        yield return new WaitForSeconds(3.52f); // РџР°СѓР·Р° РґР»СЏ РїР»Р°РІРЅРѕРіРѕ РїРµСЂРµС…РѕРґР° РџР РР‘Р›Р•Р–Р•РќРРЇ РљРђРњР•Р Р«  Рљ РљРђРќР’РђРЎРЈ
+
+        // РЈРјРµРЅСЊС€Р°РµРј СЂР°Р·РјРµСЂ РєР°РјРµСЂС‹ Р·Р° 0.2 СЃРµРєСѓРЅРґС‹
+        elapsedTime = 0f;
+        while (elapsedTime < 0.3f)
+        {
+            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, initialOrthographicSize, elapsedTime / 0.3f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
     }
 
-    // Настройка кнопок при запуске
-    private void Start()
+    private IEnumerator ZoomIn()
     {
+        while (mainCamera.orthographicSize > initialOrthographicSize)
+        {
+            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, initialOrthographicSize, zoomInSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
 
-        // Добавление обработчиков кликов
-        CraftingButton.onClick.AddListener(GoToCrafting);
-        StupaButton.onClick.AddListener(GoToStupa);
-        Exit_SoldButton.onClick.AddListener(ExitGoToSold);
-        Craft_SoldButton.onClick.AddListener(CraftGoToSold);
-        ExitButton.onClick.AddListener(GoToExit);
-
+    // РћР±РЅРѕРІР»РµРЅРёРµ РІ РєР°Р¶РґРѕРј РєР°РґСЂРµ
+    private void Update()
+    {
+        // РќРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј, СЂР°Р·РјРµСЂ РєР°РјРµСЂС‹ СѓРїСЂР°РІР»СЏРµС‚СЃСЏ MoveCameraTo Рё ZoomIn
     }
 
 }
