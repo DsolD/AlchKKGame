@@ -39,7 +39,7 @@ public class SwitchSlot : MonoBehaviour
     }
 
     // Функция для переключения категории 1
-    void SwitchCategory1()
+    public void SwitchCategory1()
     {
         DeactivateAllGameObjects();
         CategoryGameObject1.SetActive(true);
