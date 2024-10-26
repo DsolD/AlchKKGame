@@ -17,6 +17,9 @@ public class SwitchSlot : MonoBehaviour
     public Button CategoryButton3;
     public Button CategoryButton4;
 
+    // Переменная для хранения выбранной категории
+    public int selectedCategory = 1; // По умолчанию - категория 1
+
     void Start()
     {
         // Добавляем обработчики событий для кнопок
@@ -27,6 +30,9 @@ public class SwitchSlot : MonoBehaviour
 
         // Деактивируем все объекты по умолчанию
         DeactivateAllGameObjects();
+
+        // Активируем начальную категорию
+        SwitchCategory(selectedCategory);
     }
 
     // Функция для деактивации всех объектов
@@ -38,31 +44,49 @@ public class SwitchSlot : MonoBehaviour
         CategoryGameObject4.SetActive(false);
     }
 
+    // Объединим функции переключения в одну
+    public void SwitchCategory(int category)
+    {
+        DeactivateAllGameObjects();
+        switch (category)
+        {
+            case 1: CategoryGameObject1.SetActive(true); break;
+
+            case 2:
+                CategoryGameObject2.SetActive(true);
+                break;
+            case 3:
+                CategoryGameObject3.SetActive(true);
+                break;
+            case 4:
+                CategoryGameObject4.SetActive(true);
+                break;
+        }
+        // Обновим "selectedCategory"
+        selectedCategory = category;
+    }
+
     // Функция для переключения категории 1
     public void SwitchCategory1()
     {
-        DeactivateAllGameObjects();
-        CategoryGameObject1.SetActive(true);
+        SwitchCategory(1);
     }
 
     // Функция для переключения категории 2
     void SwitchCategory2()
     {
-        DeactivateAllGameObjects();
-        CategoryGameObject2.SetActive(true);
+        SwitchCategory(2);
     }
 
     // Функция для переключения категории 3
     void SwitchCategory3()
     {
-        DeactivateAllGameObjects();
-        CategoryGameObject3.SetActive(true);
+        SwitchCategory(3);
     }
 
     // Функция для переключения категории 4
     void SwitchCategory4()
     {
-        DeactivateAllGameObjects();
-        CategoryGameObject4.SetActive(true);
+        SwitchCategory(4);
     }
 }

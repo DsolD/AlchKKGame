@@ -33,7 +33,8 @@ public class UIController : MonoBehaviour
     private void Awake()
     {
 
-        HideCraftingCanvas();
+       // HideCraftingCanvas();
+
         HideExitCanvas();
       //  HideSoldCanvas(); временное решения пока не нету запомиинание твоей сцены
         HideStupaCanvas();
