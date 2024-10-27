@@ -45,7 +45,7 @@ public class NPSController : MonoBehaviour
         dontTradeButton.onClick.AddListener(DontTrade);
 
         // Изначальное значение монет
-  //      UpdateCoinText();
+        // UpdateCoinText();
 
         UpdateNPCtext();
     }

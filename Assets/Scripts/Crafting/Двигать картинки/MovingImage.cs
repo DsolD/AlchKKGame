@@ -68,9 +68,6 @@ public class MovingImage : MonoBehaviour, IPointerUpHandler, IBeginDragHandler, 
         }
     }
 
-
-
-
     // Обработчик отпускания левой кнопки мыши
     public void OnPointerUp(PointerEventData eventData)
     {

@@ -10,12 +10,14 @@ public class SwitchSlot : MonoBehaviour
     public GameObject CategoryGameObject2;
     public GameObject CategoryGameObject3;
     public GameObject CategoryGameObject4;
+    public GameObject CategoryGameObject5;
 
     // Кнопки
     public Button CategoryButton1;
     public Button CategoryButton2;
     public Button CategoryButton3;
     public Button CategoryButton4;
+    public Button CategoryButton5;
 
     // Переменная для хранения выбранной категории
     public int selectedCategory = 1; // По умолчанию - категория 1
@@ -27,6 +29,7 @@ public class SwitchSlot : MonoBehaviour
         CategoryButton2.onClick.AddListener(SwitchCategory2);
         CategoryButton3.onClick.AddListener(SwitchCategory3);
         CategoryButton4.onClick.AddListener(SwitchCategory4);
+        CategoryButton5.onClick.AddListener(SwitchCategory5);
 
         // Деактивируем все объекты по умолчанию
         DeactivateAllGameObjects();
@@ -42,6 +45,7 @@ public class SwitchSlot : MonoBehaviour
         CategoryGameObject2.SetActive(false);
         CategoryGameObject3.SetActive(false);
         CategoryGameObject4.SetActive(false);
+        CategoryGameObject5.SetActive(false);
     }
 
     // Объединим функции переключения в одну
@@ -50,8 +54,8 @@ public class SwitchSlot : MonoBehaviour
         DeactivateAllGameObjects();
         switch (category)
         {
-            case 1: CategoryGameObject1.SetActive(true); break;
-
+            case 1: CategoryGameObject1.SetActive(true); 
+                break;
             case 2:
                 CategoryGameObject2.SetActive(true);
                 break;
@@ -60,6 +64,9 @@ public class SwitchSlot : MonoBehaviour
                 break;
             case 4:
                 CategoryGameObject4.SetActive(true);
+                break;
+            case 5:
+                CategoryGameObject5.SetActive(true);
                 break;
         }
         // Обновим "selectedCategory"
@@ -89,4 +96,10 @@ public class SwitchSlot : MonoBehaviour
     {
         SwitchCategory(4);
     }
+
+    void SwitchCategory5()
+    {
+        SwitchCategory(5);
+    }
+
 }

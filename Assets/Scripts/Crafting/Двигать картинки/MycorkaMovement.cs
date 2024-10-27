@@ -8,7 +8,6 @@ public class MycorkaMovement : MonoBehaviour, IPointerUpHandler, IBeginDragHandl
     
     public Vector2 startPosition; // Целевая позиция для движения
 
-
     public Camera mainCamera; //  Основная камера
     public Canvas canvas; // Canvas, на котором находится Image
 
@@ -18,8 +17,6 @@ public class MycorkaMovement : MonoBehaviour, IPointerUpHandler, IBeginDragHandl
     {
         startPosition = transform.position; // Начальная позиция
     }
-
-
 
     void Update()
     {

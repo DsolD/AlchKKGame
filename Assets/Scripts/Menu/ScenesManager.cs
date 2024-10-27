@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class ScenesManager : MonoBehaviour
+public class ScenesManager : MonoBehaviour // menu Scene
 {
 
     public Button StartGame;
@@ -20,7 +20,6 @@ public class ScenesManager : MonoBehaviour
     {
 
         Debug.Log("Good");
-        Information.LoadData();
 
     }
 

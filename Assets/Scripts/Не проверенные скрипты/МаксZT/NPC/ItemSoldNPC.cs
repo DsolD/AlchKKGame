@@ -17,9 +17,7 @@ public class ItemSold
     public int id;
     public string name;
     public Sprite img;
-
-    public float minPrice; // Минимальная цена
-    public float maxPrice; // Максимальная цена
+    public float Price;
 
 }
 
