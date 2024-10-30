@@ -4,18 +4,19 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI; // Добавили using UnityEngine.UI
 
-public class NewMovingImage : MonoBehaviour, IPointerUpHandler, IBeginDragHandler, IDragHandler
+public class NewMovingImage : MonoBehaviour, IPointerUpHandler, IDragHandler , IBeginDragHandler
 {
     // Ссылки на объекты
-    public GameObject ImagePrefab; // Префаб для создаваемого изображения 
+    // public Image IdreditionImage;
+    //public GameObject ImagePrefab; // Префаб для создаваемого изображения 
     public Camera mainCamera; // Основная камера
     public Canvas canvas; // Canvas, на котором находится Image
 
     private Vector2 startPosition;
     private bool isDragging = false;
-    private GameObject draggingImage; // Клонируемое изображение для перетаскивания 
+    //private GameObject draggingImage; // Клонируемое изображение для перетаскивания 
 
-    // Обработчик начала перетаскивания
+    //   Обработчик начала перетаскивания
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -23,13 +24,13 @@ public class NewMovingImage : MonoBehaviour, IPointerUpHandler, IBeginDragHandle
             isDragging = true;
 
             // Создание клонированного изображения
-            draggingImage = Instantiate(ImagePrefab, canvas.transform);
-            draggingImage.GetComponent<Image>().sprite = GetComponent<Image>().sprite; // Получение спрайта из компонента Image
+            //draggingImage = Instantiate(ImagePrefab, canvas.transform);
+            //draggingImage.GetComponent<Image>().sprite = GetComponent<Image>().sprite; // Получение спрайта из компонента Image
 
             // Позиционирование клонированного изображения
             Vector2 mousePosition = eventData.position;
             Vector2 worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
-            draggingImage.transform.position = worldPosition;
+            //draggingImage.transform.position = worldPosition;
         }
     }
 
@@ -40,7 +41,7 @@ public class NewMovingImage : MonoBehaviour, IPointerUpHandler, IBeginDragHandle
         {
             Vector2 mousePosition = eventData.position;
             Vector2 worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
-            draggingImage.transform.position = worldPosition;
+            transform.position = worldPosition; // Перемещаем сам объект
         }
     }
 
@@ -50,7 +51,7 @@ public class NewMovingImage : MonoBehaviour, IPointerUpHandler, IBeginDragHandle
         if (isDragging)
         {
             // Уничтожение клонированного изображения
-            Destroy(draggingImage);
+            //Destroy(draggingImage);
             isDragging = false;
         }
     }
