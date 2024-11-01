@@ -140,9 +140,9 @@ public class Inventory : MonoBehaviour
             ii.itemGameObj = newItem;
 
             RectTransform rt = newItem.GetComponent<RectTransform>();
-            rt.localPosition = new Vector3(0, 0, 0);
-            rt.localScale = new Vector3(1, 1, 1);
-            newItem.GetComponentInChildren<RectTransform>().localScale = new Vector3(1, 1, 1);
+            rt.localPosition = new Vector2(0, 0);
+            rt.localScale = new Vector2(1, 1);
+            newItem.GetComponentInChildren<RectTransform>().localScale = new Vector2(1, 1);
 
             Button tempButton = newItem.GetComponent<Button>();
 
@@ -214,8 +214,8 @@ public class Inventory : MonoBehaviour
 
     public void MoveObject()
     {
-        Vector3 pos = Input.mousePosition + offset;
-        pos.z = InventoryMainObject.GetComponent<RectTransform>().position.z;
+        Vector2 pos = Input.mousePosition + offset;
+        pos.y = InventoryMainObject.GetComponent<RectTransform>().position.y;
         movingObject.position = cam.ScreenToWorldPoint(pos);
     }
 
@@ -228,6 +228,11 @@ public class Inventory : MonoBehaviour
         New.count = old.count;
 
         return New;
+    }
+
+    internal void AddItem(string itemName)
+    {
+        throw new System.NotImplementedException();
     }
 }
 
