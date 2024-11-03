@@ -3,17 +3,15 @@ using UnityEngine.UI;
 
 public class HelpMoney : MonoBehaviour
 {
-    public int Money5 = 5;   // Значение для первой кнопки
-    public int Money15 = 15;  // Значение для второй кнопки
+   // public int Money5 = 5;   // Значение для первой кнопки
+ //   public int Money15 = 15;  // Значение для второй кнопки
 
-    public Button MinusMoneyButton;
+ //   public Button MinusMoneyButton;
 
   //  public Button Plus15MoneyButton; // Кнопка для +15
-    public Button CoinZero;
+  //  public Button CoinZero;
 
-
-
-    public Text AmountsMoney;
+  //  public Text AmountsMoney;
     public Text AmountsCoin;
 
     void Start()
@@ -22,10 +20,10 @@ public class HelpMoney : MonoBehaviour
         UpdateAmounts();
 
         // Подписываемся на события нажатия кнопок
-        MinusMoneyButton.onClick.AddListener(MinusMoney);
+  //      MinusMoneyButton.onClick.AddListener(MinusMoney);
 
   //      Plus15MoneyButton.onClick.AddListener(() => AddMoney(Money15));
-        CoinZero.onClick.AddListener(CoinZerobb);
+   //     CoinZero.onClick.AddListener(CoinZerobb);
 
     }
 
@@ -37,19 +35,19 @@ public class HelpMoney : MonoBehaviour
 
     void UpdateAmounts()
     {
-        AmountsCoin.text = "Coins: " + Information.Coin.ToString();
-        AmountsMoney.text = "Money in Help: " + Money5.ToString() + " (5), " + Money15.ToString() + " (15)";
+        AmountsCoin.text = "Coins: " + NewInformation.Coin.ToString();
+   //     AmountsMoney.text = "Money in Help: " + Money5.ToString() + " (5), " + Money15.ToString() + " (15)";
     }
 
     public void MinusMoney()
     {
-        Information.Coin -= Money5; // Уменьшаем монеты на 5
+   //     Information.Coin -= Money5; // Уменьшаем монеты на 5
     }
 
     // Метод для добавления монет
     public void AddMoney(int amount)
     {
-        Information.Coin += amount; // Добавляем указанное количество монет
+        NewInformation.Coin += amount; // Добавляем указанное количество монет
     }
 
     public void CoinZerobb()

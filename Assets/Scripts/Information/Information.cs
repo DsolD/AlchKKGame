@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 
 [System.Serializable]
-public class Ingredient
+public class Ingredientafk
 {
     public string Name;
     public int Amount;
     public Sprite Image; // Используйте Sprite вместо Texture2D для изображений в Unity
     public int IDIngredient;
 
-    public Ingredient(string name, int amount, Sprite image, int idIngredient)
+    public Ingredientafk(string name, int amount, Sprite image, int idIngredient)
     {
         Name = name;
         Amount = amount;
@@ -23,21 +23,23 @@ public class Ingredient
 }
 
 [System.Serializable]
-public class Potion
+public class Potionafk
 {
     public string Name;
     public int Amount;
     public Sprite Image;
     public int Price;
     public int IDPotion;
+    public int LevelPotion;
 
-    public Potion(string name, int amount, Sprite image, int price, int idPotion)
+    public Potionafk(string name, int amount, Sprite image, int price, int idPotion, int levelPotion)
     {
         Name = name;
         Amount = amount;
         Image = image;
         Price = price;
         IDPotion = idPotion;
+        LevelPotion = levelPotion;
     }
 }
 
@@ -47,13 +49,42 @@ public class Information : MonoBehaviour
     public static Dictionary<string, Potion> Potions = new Dictionary<string, Potion>();
 
 
-    //  ЗЕЛЬЯ
-    public static string Healing = "Healing"; // Исцеление 0
-    public static string Stamina = "Stamina"; // Выносливость 1
-    public static string Speed = "Speed"; // Скорость 2
-    public static string Resistance = "Resistance"; // Сопротивление 3 
-    public static string Power_will = "Power_will"; // Сила воли 4
-    public static string Speed_growth_plant = "Speed_growth_plant"; // Скорость роста растений 5
+   //  ЗЕЛЬЯ
+    // Исцеленья
+    public static string Healing_level1 = "Healing";
+    public static string Healing_level2 = "Healing";
+    public static string Healing_level3 = "Healing";
+    public static string Healing_level4 = "Healing";
+
+    // Выносливость
+    public static string Stamina_level1 = "Stamina";
+    public static string Stamina_level2 = "Stamina";
+    public static string Stamina_level3 = "Stamina";
+    public static string Stamina_level4 = "Stamina";
+
+    // Скорость
+    public static string Speed_level1 = "Speed";
+    public static string Speed_level2 = "Speed";
+    public static string Speed_level3 = "Speed";
+    public static string Speed_level4 = "Speed";
+
+    // Сопротивление
+    public static string Resistance_level1 = "Resistance";
+    public static string Resistance_level2 = "Resistance";
+    public static string Resistance_level3 = "Resistance";
+    public static string Resistance_level4 = "Resistance";
+
+    // Сила воли
+    public static string Power_will_level1 = "Power_will";
+    public static string Power_will_level2 = "Power_will";
+    public static string Power_will_level3 = "Power_will";
+    public static string Power_will_level4 = "Power_will";
+
+    // Скорость роста растений
+    public static string Speed_growth_plant_level1 = "Speed_growth_plant";
+    public static string Speed_growth_plant_level2 = "Speed_growth_plant";
+    public static string Speed_growth_plant_level3 = "Speed_growth_plant";
+    public static string Speed_growth_plant_level4 = "Speed_growth_plant";
 
     //  Ингредиенты
 

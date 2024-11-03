@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SaveLoadManager : MonoBehaviour // надо добавить что при заходе сцены в меню оно сохран€лось
 {
-    private DataManagerSave dataManager; // —сылка на DataManagerSave
+    public DataManagerSave dataManager; // —сылка на DataManagerSave
 
     void Start()
     {

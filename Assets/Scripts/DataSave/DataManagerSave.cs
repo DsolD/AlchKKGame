@@ -10,7 +10,7 @@ public class SaveData
     public int _Coin;
     public Dictionary<string, Ingredient> _ingredients;
     public Dictionary<string, Potion> _potions;
-}
+} 
 
 public class DataManagerSave : MonoBehaviour
 {

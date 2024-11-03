@@ -41,18 +41,46 @@ public class GameDataInitializer : MonoBehaviour
                { Information.Black_Mushroom_Extract, new Ingredient(Information.Black_Mushroom_Extract, 0, Resources.Load<Sprite>("Sprites/Black_Mushroom_Extract"), 30) },
                { Information.Mimosa_Seed_Oil, new Ingredient(Information.Mimosa_Seed_Oil, 0, Resources.Load<Sprite>("Sprites/Mimosa_Seed_Oil"), 31) },
                { Information.Blue_Mushroom_Oil, new Ingredient(Information.Blue_Mushroom_Oil, 0, Resources.Load<Sprite>("Sprites/Blue_Mushroom_Oil"), 32) } // где нолики это их количества
-        
-    };
+        };
+    }
 
         // Заполняем словарь Potions
-        Information.Potions = new Dictionary<string, Potion>
-           {
-               { Information.Healing, new Potion(Information.Healing, 0, Resources.Load<Sprite>("Sprites/Healing"), 100, 0) }, // ЦЕНА блять 100
-               { Information.Stamina, new Potion(Information.Stamina, 0, Resources.Load<Sprite>("Sprites/Stamina"), 200, 1) },
-               { Information.Speed, new Potion(Information.Speed, 0, Resources.Load<Sprite>("Sprites/Speed"), 150, 2) },
-               { Information.Resistance, new Potion(Information.Resistance, 0, Resources.Load<Sprite>("Sprites/Resistance"), 300, 3) },
-               { Information.Power_will, new Potion(Information.Power_will, 0, Resources.Load<Sprite>("Sprites/Power_will"), 250, 4) },
-               // ... Добавьте оставшиеся зелья 
-           };
+        // Создание зелий
+    public static Dictionary<string, Potion> CreatePotions()
+    {
+            return new Dictionary<string, Potion>()
+            {
+        // Исцеление
+        { Information.Healing_level1, new Potion(Information.Healing_level1, 0, Resources.Load<Sprite>("Sprites/Healing"), 100, 0,1) },
+        { Information.Healing_level2, new Potion(Information.Healing_level2, 0, Resources.Load<Sprite>("Sprites/Healing"), 100, 1,2) },
+        { Information.Healing_level3, new Potion(Information.Healing_level3, 0, Resources.Load<Sprite>("Sprites/Healing"), 100, 2,3) },
+        { Information.Healing_level4, new Potion(Information.Healing_level4, 0, Resources.Load<Sprite>("Sprites/Healing"), 100, 3,4) },
+
+        // Выносливость
+        { Information.Stamina_level1, new Potion(Information.Stamina_level1, 0, Resources.Load<Sprite>("Sprites/Stamina"), 200, 4,1) },
+        { Information.Stamina_level2, new Potion(Information.Stamina_level2, 0, Resources.Load<Sprite>("Sprites/Stamina"), 200, 5,2) },
+        { Information.Stamina_level3, new Potion(Information.Stamina_level3, 0, Resources.Load<Sprite>("Sprites/Stamina"), 200, 6,3) },
+        { Information.Stamina_level4, new Potion(Information.Stamina_level4, 0, Resources.Load<Sprite>("Sprites/Stamina"), 200, 7,4) },
+
+        // Скорость
+        { Information.Speed_level1, new Potion(Information.Speed_level1, 0, Resources.Load<Sprite>("Sprites/Speed"), 150, 8,1) },
+        { Information.Speed_level2, new Potion(Information.Speed_level2, 0, Resources.Load<Sprite>("Sprites/Speed"), 150, 9,2) },
+        { Information.Speed_level3, new Potion(Information.Speed_level3, 0, Resources.Load<Sprite>("Sprites/Speed"), 150, 10,3) },
+        { Information.Speed_level4, new Potion(Information.Speed_level4, 0, Resources.Load<Sprite>("Sprites/Speed"), 150, 11,4) },
+
+        // Сопротивление
+        { Information.Resistance_level1, new Potion(Information.Resistance_level1, 0, Resources.Load<Sprite>("Sprites/Resistance"), 300, 12,1) },
+        { Information.Resistance_level2, new Potion(Information.Resistance_level2, 0, Resources.Load<Sprite>("Sprites/Resistance"), 300, 13,2) },
+        { Information.Resistance_level3, new Potion(Information.Resistance_level3, 0, Resources.Load<Sprite>("Sprites/Resistance"), 300, 14,3) },
+        { Information.Resistance_level4, new Potion(Information.Resistance_level4, 0, Resources.Load<Sprite>("Sprites/Resistance"), 300, 15,4) },
+
+        // Сила воли
+        { Information.Power_will_level1, new Potion(Information.Power_will_level1, 0, Resources.Load<Sprite>("Sprites/Power_will"), 250, 16,1) },
+        { Information.Power_will_level2, new Potion(Information.Power_will_level2, 0, Resources.Load<Sprite>("Sprites/Power_will"), 250, 17,2) },
+        { Information.Power_will_level3, new Potion(Information.Power_will_level3, 0, Resources.Load<Sprite>("Sprites/Power_will"), 250, 18,3) },
+        { Information.Power_will_level4, new Potion(Information.Power_will_level4, 0, Resources.Load<Sprite>("Sprites/Power_will"), 250, 19,4) },
+            };
     }
+
+
 }
