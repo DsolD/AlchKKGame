@@ -16,8 +16,6 @@ public class CreatorNPC : MonoBehaviour
         creatornpcbutton.onClick.AddListener(CreateObject);
     }
 
-
-
     // Метод для создания объекта
     public void CreateObject()
     {
@@ -31,8 +29,8 @@ public class CreatorNPC : MonoBehaviour
         rectTransform.SetParent(canvas.transform, false);
 
         // Центрирование объекта на канвасе
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTransform.anchorMin = new Vector2(0.8f, 0.6f);
+        rectTransform.anchorMax = new Vector2(0.8f, 0.6f);
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
         rectTransform.anchoredPosition = Vector2.zero;
 

@@ -47,6 +47,20 @@ public class Potion
 
 public class NewInformation : MonoBehaviour
 {
+    public static NewInformation instance; // Статическая переменная
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+    }
+
+    public static int Coin;
 
     public DataManager DataManager; // Ссылка на объект DataManager
 
@@ -138,9 +152,6 @@ public class NewInformation : MonoBehaviour
 
     public static string Mimosa_Seed_Oil = "Mimosa_Seed_Oil"; // Масло из семян мимозы 31
     public static string Blue_Mushroom_Oil = "Blue_Mushroom_Oil"; // Масло из синиго гриба 32
-
-    // Монета
-    public static int Coin;
 
     public static Dictionary<string, Ingredient> CreateIngredients()
     {

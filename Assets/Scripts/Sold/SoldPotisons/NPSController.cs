@@ -9,7 +9,10 @@ public class NPSController : MonoBehaviour
     public GameObject npcPrefab;
 
     // Скрипт, отвечающий за информацию о монетах
-    public NewInformation information;
+    private NewInformation information;
+
+    // Ссылка на PlayerCharisma
+    private PlayerCharisma playerCharisma;
 
     // Кнопка для продажи
     public Button sellButton;
@@ -50,8 +53,33 @@ public class NPSController : MonoBehaviour
     // Индекс текущей фразы
     private int currentDialogueIndex = 0;
 
+    // Ссылка на NPCCharisma
+    public NPCCharisma npcCharisma;
+
+    // Ссылка на объект предмета, который продают
+ //   public GameObject itemToSell;
+
     void Start()
     {
+
+        // Доступ к NewInformation через статическую переменную
+        NewInformation newInformation = NewInformation.instance;
+        if (newInformation == null)
+        {
+            Debug.LogError("NewInformation не найден!");
+            return;
+        }
+
+        // Доступ к PlayerCharisma через статическую переменную
+        PlayerCharisma playerCharisma = PlayerCharisma.instance;
+        if (playerCharisma == null)
+        {
+            Debug.LogError("PlayerCharisma не найден!");
+            return;
+        }
+
+
+
         // Настройка кнопок
         sellButton.onClick.AddListener(SellItem);
         dontTradeButton.onClick.AddListener(DontTrade);
@@ -64,62 +92,33 @@ public class NPSController : MonoBehaviour
         itemImagePrefab.gameObject.SetActive(false);
         npcText.gameObject.SetActive(false);
 
-        // Проверка, был ли задан скрипт с информацией
-        // if (information == null)
-        // {
-        //     Debug.LogError("Скрипт NewInformation не был назначен. Проверьте настройки.");
-        //     return;
-        //// }
-
-        //// Проверка, был ли задан текст NPC
-        //if (npcText == null)
-        //{
-        //    Debug.LogError("Текст NPC не был назначен. Проверьте настройки.");
-        //    return;
-        //}
-
-        // Изначальное значение монет (не нужно, если информация о монетах обновляется в другом месте)
-        // UpdateCoinText();
     }
-
 
     // Создание нового NPC
     public void SpawnNPC()
     {
+        npchelp.gameObject.SetActive(false);
 
-        Destroy(npchelp.gameObject);
+        // Создание объекта NPC
+       // currentNPC = Instantiate(npcPrefab, new Vector2(transform.position.x, transform.position.y), transform.rotation);
 
-        itemImagePrefab.gameObject.SetActive(true);
+        // Получение компонента NPCCharisma
+        npcCharisma = npcPrefab.GetComponent<NPCCharisma>();
 
         npcText.gameObject.SetActive(true);
-        // Создание экземпляра префаба
-        //  currentNPC = Instantiate(npcPrefab, transform.position, Quaternion.identity);
-
-        // Создание изображения предмета
-        // Image itemImage = Instantiate(itemImagePrefab, new Vector2(currentNPC.transform.position.x, currentNPC.transform.position.y) + new Vector2(0.5f, 0), Quaternion.identity);
-
-        // Получение изображения NPC из компонента
-        // npcImage = currentNPC.GetComponent<Image>();
-        // Запуск корутины для задержки появления текста и кнопок
         StartCoroutine(DelayedDialogue());
 
         // Запуск таймера до удаления NPC
         Invoke("DestroyNPC", tradeTimeout);
     }
-
     // Корутина для задержки появления текста и кнопок
     private IEnumerator DelayedDialogue()
     {
-        // Ожидание 5 секунд
-        yield return new WaitForSeconds(3f);
-
-        // Включение кнопок
-        sellButton.gameObject.SetActive(true);
-        dontTradeButton.gameObject.SetActive(true);
+        // Ожидание 1.5 секунд
+        yield return new WaitForSeconds(1.1f);
 
         // Запуск корутины для медленной печати текста
         StartCoroutine(TypeText(npcDialogue[currentDialogueIndex]));
-
     }
 
     // Корутина для медленной печати текста
@@ -153,11 +152,52 @@ public class NPSController : MonoBehaviour
     private void SellItem()
     {
         itemImagePrefab.gameObject.SetActive(false);
-        // Увеличение количества монет
-        NewInformation.Coin += npcCoinPrice;
-        
-        // Изменение текста NPC
-        npcText.text = itemSellItem; // Изменено имя переменной
+
+        // Рассчитываем вероятность продажи по удвоенной цене
+        float sellChance = npcCharisma.CalculateSellChance(npcCoinPrice);
+
+        // Генерируем случайное число от 0 до 100
+        float randomValue = Random.Range(0f, 100f);
+
+        // Проверяем, прошла ли продажа по удвоенной цене
+        if (randomValue <= sellChance)
+        {
+            // Увеличиваем количество монет игрока
+            NewInformation.Coin += npcCoinPrice * 2; // Исправленная строка
+            // Отображаем сообщение о продаже по удвоенной цене
+            npcText.text = itemSellItem;
+
+            // Увеличиваем харизму игрока
+            playerCharisma.IncreaseCharisma();
+
+            // Удаляем NPC
+            Invoke("DestroyNPC", 3f);
+        }
+        else
+        {
+            // Проверяем, успешна ли сделка
+            if (npcCharisma.IsSuccessfulTrade(npcCoinPrice, npcCoinPrice))
+            {
+                // Увеличиваем количество монет игрока
+                NewInformation.Coin += npcCoinPrice; // Исправленная строка
+                // Отображаем сообщение об успешной сделке
+                npcText.text = itemSellItem;
+
+                // Увеличиваем харизму игрока
+                playerCharisma.IncreaseCharisma();
+
+                // Удаляем NPC
+                Invoke("DestroyNPC", 3f);
+            }
+            else
+            {
+                // Отображаем сообщение об отказе
+                npcText.text = itemSellItem;
+
+                // Удаляем NPC
+                Invoke("DestroyNPC", 3f);
+            }
+        }
 
         sellButton.gameObject.SetActive(false);
         dontTradeButton.gameObject.SetActive(false);
@@ -180,14 +220,11 @@ public class NPSController : MonoBehaviour
         Invoke("DestroyNPC", 3f);
     }
 
+    // Удаление NPC
     private void DestroyNPC()
     {
-        Destroy(currentNPC);
+        Destroy(npcPrefab);
     }
-
-    // Обновление текста с количеством монет (не нужно, если информация о монетах обновляется в другом месте)
-    // private void UpdateCoinText()
-    // {
-    //     // Update the coin text here using information.Coin
-    // }
 }
+
+
